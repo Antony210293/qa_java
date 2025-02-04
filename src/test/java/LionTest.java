@@ -10,6 +10,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
 
 @RunWith(MockitoJUnitRunner.class)
 public class LionTest {
@@ -31,8 +32,8 @@ public class LionTest {
         Lion lion = new Lion("Самец", feline);
         List<String> lionFood = List.of("Животные", "Птицы", "Рыба");
         Mockito.when(feline.getFood("Хищник")).thenReturn(List.of("Животные", "Птицы", "Рыба"));
-        List<String> actuallionFood = lion.getFood();
-        assertEquals(lionFood, actuallionFood);
+        List<String> actualLionFood = lion.getFood();
+        assertEquals(lionFood, actualLionFood);
     }
 
     @Test
@@ -53,11 +54,9 @@ public class LionTest {
 
     @Test
     public void doesHaveManeThrowsExceptionTest() {
-        try {
-            Lion lion = new Lion("Собака", feline);
-        } catch (Exception exception) {
-            String textException = "Используйте допустимые значения пола животного - самец или самка";
-            assertEquals(textException, exception.getMessage());
-        }
+        Exception exception = assertThrows(Exception.class, () -> {
+            new Lion("Собака", feline);
+        });
+        assertEquals("Используйте допустимые значения пола животного - самец или самка", exception.getMessage());
     }
 }
